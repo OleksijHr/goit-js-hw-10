@@ -31,21 +31,23 @@ function createPromise(delay, state) {
 
 function processFulfilled(result) {
   console.log(`Promise resolved after ${result}ms`);
-    iziToast.success({
-        title: 'OK',
-        message: `Promise resolved after ${result}ms`,
-        backgroundColor: 'green',
-        closeOnClick: 'true'
-    });
+  iziToast.success({
+    title: 'OK',
+    message: `Promise resolved after ${result}ms`,
+    closeOnClick: 'true',
+    position: 'topLeft',
+    backgroundColor: 'green',
+  });
 }
 
 function processRejected(error) {
   console.log(`Promise rejected after ${error}ms`);
     iziToast.error({
-        title: 'Error',
-        message: `Promise rejected after ${error}ms`,
-        backgroundColor: 'red',
-        closeOnClick: 'true'
+      title: 'Error',
+      message: `Promise rejected after ${error}ms`,
+      backgroundColor: 'red',
+      closeOnClick: 'true',
+      position: 'topLeft'
     });
 }
 

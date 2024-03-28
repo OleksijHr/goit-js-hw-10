@@ -72,7 +72,7 @@ function currentDifferenceDate(selectedDates) {
       message: 'Illegal operation',
       backgroundColor: 'red',
       closeOnClick: true,
-      position: 'topCenter'
+      position: 'topLeft'
 });
   }
 
@@ -97,7 +97,7 @@ function startTimer() {
       backgroundColor: 'green',
       closeOnClick: true,
       closeOnEscape: true,
-      position: 'center'
+      position: 'topLeft'
     });
     clearInterval(timerId);
   } else {
