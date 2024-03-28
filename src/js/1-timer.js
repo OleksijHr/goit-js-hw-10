@@ -12,7 +12,6 @@ import "izitoast/dist/css/iziToast.min.css";
 
 // Get element date input, start btn, data: days, hours, min, sec
 const imputDatePickerRef = document.querySelector('#datetime-picker');
-console.log(imputDatePickerRef);
 const btnStartRef =  document.querySelector('[data-start]');
 const daysRef =  document.querySelector('[data-days]');
 const hoursRef =  document.querySelector('[data-hours]');
@@ -68,13 +67,11 @@ function currentDifferenceDate(selectedDates) {
 
   if (selectedDates < currentDate) {
     btnStartRef.setAttribute('disabled', true);
-    return iziToast.show({
+    return iziToast.error({
       title: 'Error',
       message: 'Illegal operation',
-      color: 'red',
+      backgroundColor: 'red',
       closeOnClick: true,
-      icon: '/src/img/bi_x-octagon.svg',
-      iconColor: '#FAFAFB',
       position: 'topCenter'
 });
   }
@@ -94,9 +91,10 @@ function startTimer() {
   timeDifference -= 1000;
 
   if (secondsRef.textContent <= 0 && minutesRef.textContent <= 0) {
-    iziToast.show({
+    iziToast.success({
       message: 'Time end',
-      color: 'green',
+      color: 'white',
+      backgroundColor: 'green',
       closeOnClick: true,
       closeOnEscape: true,
       position: 'center'
@@ -135,7 +133,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
