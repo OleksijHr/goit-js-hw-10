@@ -11,12 +11,13 @@ import "izitoast/dist/css/iziToast.min.css";
 
 
 // Get element date input, start btn, data: days, hours, min, sec
-const imputDatePickerRef = document.querySelector('#datetime-picker');
+const inputDatePickerRef = document.querySelector('#datetime-picker');
 const btnStartRef =  document.querySelector('[data-start]');
 const daysRef =  document.querySelector('[data-days]');
 const hoursRef =  document.querySelector('[data-hours]');
 const minutesRef =  document.querySelector('[data-minutes]');
-const secondsRef =  document.querySelector('[data-seconds]');
+const secondsRef = document.querySelector('[data-seconds]');
+
 
 // Set initial value
 let timeDifference = 0;
@@ -29,7 +30,6 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
     currentDifferenceDate(selectedDates[0]);
   },
 };
@@ -37,24 +37,16 @@ const options = {
 btnStartRef.setAttribute('disabled', true);
 
 // Initial flatpickr
-flatpickr(imputDatePickerRef, options);
+flatpickr(inputDatePickerRef, options);
 
 // Set click event listener on button start
 btnStartRef.addEventListener('click', onBtnStart);
-// Reset timer on btn
-window.addEventListener('keydown', e => {
-  if (e.code === 'Escape' && timerId) {
-    clearInterval(timerId);
 
-    imputDatePickerRef.removeAttribute('disabled');
-    btnStartRef.setAttribute('disabled', true);
+document.addEventListener("keydown", (event) => {
+  resetTimer();
+})
 
-    secondsRef.textContent = '00';
-    minutesRef.textContent = '00';
-    hoursRef.textContent = '00';
-    daysRef.textContent = '00';
-  }
-});
+
 
 // Start timer
 function onBtnStart() {
@@ -72,7 +64,7 @@ function currentDifferenceDate(selectedDates) {
       message: 'Illegal operation',
       backgroundColor: 'red',
       closeOnClick: true,
-      position: 'topLeft'
+      position: 'topCenter'
 });
   }
 
@@ -86,19 +78,19 @@ function currentDifferenceDate(selectedDates) {
 //Timer
 function startTimer() {
   btnStartRef.setAttribute('disabled', true);
-  imputDatePickerRef.setAttribute('disabled', true);
+  inputDatePickerRef.setAttribute('disabled', true);
 
   timeDifference -= 1000;
 
   if (secondsRef.textContent <= 0 && minutesRef.textContent <= 0) {
     iziToast.success({
       message: 'Time end',
-      color: 'white',
       backgroundColor: 'green',
       closeOnClick: true,
       closeOnEscape: true,
-      position: 'topLeft'
+      position: 'topCenter'
     });
+
     clearInterval(timerId);
   } else {
     formatDate = convertMs(timeDifference);
@@ -106,13 +98,12 @@ function startTimer() {
   }
 }
 
-
 // Rendering date
 function renderDate(formatDate) {
-  daysRef.textContent = formatDate.days;
-  hoursRef.textContent = formatDate.hours;
-  minutesRef.textContent = formatDate.minutes;
-  secondsRef.textContent = formatDate.seconds;
+  daysRef.textContent = formatDate.days.toString().padStart(2, "0");
+  hoursRef.textContent = formatDate.hours.toString().padStart(2, "0");
+  minutesRef.textContent = formatDate.minutes.toString().padStart(2, "0");
+  secondsRef.textContent = formatDate.seconds.toString().padStart(2, "0");
 }
 
 function convertMs(ms) {
@@ -130,6 +121,14 @@ function convertMs(ms) {
   const minutes = Math.floor(((ms % day) % hour) / minute);
   // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
+  
   return { days, hours, minutes, seconds };
+}
+
+function resetTimer() {
+  clearInterval(timerId);
+  flatpickr(inputDatePickerRef, options).setDate(new Date());
+  renderDate({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  btnStartRef.removeAttribute('disabled');
+  inputDatePickerRef.removeAttribute('disabled');
 }
